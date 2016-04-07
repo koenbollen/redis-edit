@@ -9,6 +9,7 @@ import (
 	"os"
 	"os/exec"
 	"regexp"
+	"strconv"
 	"strings"
 
 	"github.com/docopt/docopt-go"
@@ -73,8 +74,10 @@ func cli(args []string) (string, *config, *redis.Options) {
 	if password, ok := arguments["-a"].(string); ok {
 		options.Password = password
 	}
-	if db, ok := arguments["-n"].(int64); ok {
-		options.DB = db
+	if db, ok := arguments["-n"].(string); ok {
+		if n, err := strconv.Atoi(db); err == nil {
+			options.DB = int64(n)
+		}
 	}
 
 	c := &config{
